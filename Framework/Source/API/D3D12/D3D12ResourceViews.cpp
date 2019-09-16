@@ -126,7 +126,28 @@ namespace Falcor
 
         if(pSharedPtr != nullptr)
         {
-            initializeUavDesc(pSharedPtr.get(), mipLevel, firstArraySlice, arraySize, desc);
+            // Since falcor does not support texture3d UAV, let's write a special case here
+            // Template in D3DViews.h
+            if (pSharedPtr.get()->getType() == Resource::Type::Texture3D)
+            {
+                const Texture* pTexture = dynamic_cast<const Texture*>(pSharedPtr.get());
+                assert(pTexture);   // Buffers should not get here
+                if (arraySize == Resource::kMaxPossible)
+                {
+                    arraySize = pTexture->getArraySize() - firstArraySlice;
+                }
+
+                desc = {};
+                desc.ViewDimension = getViewDimension<decltype(desc.ViewDimension)>(pTexture->getType(), pTexture->getArraySize() > 1);
+                desc.Texture3D.MipSlice = mipLevel;
+                desc.Texture3D.FirstWSlice = 0;
+                desc.Texture3D.WSize = pTexture->getDepth();
+                desc.Format = getDxgiFormat(pTexture->getFormat());
+            }
+            else
+            {
+                initializeUavDesc(pSharedPtr.get(), mipLevel, firstArraySlice, arraySize, desc);
+            }
             resHandle = pSharedPtr->getApiHandle();
 
             StructuredBuffer::SharedConstPtr pStructuredBuffer = std::dynamic_pointer_cast<const StructuredBuffer>(pSharedPtr);

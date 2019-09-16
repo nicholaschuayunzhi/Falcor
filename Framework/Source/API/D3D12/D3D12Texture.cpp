@@ -49,6 +49,8 @@ namespace Falcor
             return (isTextureArray) ? D3D12_UAV_DIMENSION_TEXTURE2DARRAY : D3D12_UAV_DIMENSION_TEXTURE2D;
         case Texture::Type::TextureCube:
             return D3D12_UAV_DIMENSION_TEXTURE2DARRAY;
+        case Texture::Type::Texture3D:
+            return D3D12_UAV_DIMENSION_TEXTURE3D;
         default:
             should_not_get_here();
             return D3D12_UAV_DIMENSION_UNKNOWN;

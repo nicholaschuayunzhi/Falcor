@@ -37,7 +37,7 @@ namespace Falcor
     public:
         using SharedPtr = std::shared_ptr<RtState>;
         using SharedConstPtr = std::shared_ptr<const RtState>;
-        
+
         static SharedPtr create();
         ~RtState();
 

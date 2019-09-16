@@ -202,7 +202,7 @@ namespace Falcor
     inline void initializeDsvRtvDesc(const Resource* pResource, uint32_t mipLevel, uint32_t firstArraySlice, uint32_t arraySize, DescType& desc)
     {
         initializeDsvRtvUavDescCommon<DescType, false>(pResource, mipLevel, firstArraySlice, arraySize, desc);
-        
+
         if(pResource->getType() == Resource::Type::Texture2DMultisample)
         {
             const Texture* pTexture = dynamic_cast<const Texture*>(pResource);
